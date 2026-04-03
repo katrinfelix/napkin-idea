@@ -3,729 +3,247 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NapkinIdea — AI Business Builder</title>
+<title>NapkinIdea — Собери бизнес на салфетке</title>
+<meta name="description" content="Умный конструктор бизнес-идей. Выбери нишу, получи офферы, финмодель и маркетинговую стратегию за 15 минут.">
+<meta property="og:title" content="NapkinIdea — Собери бизнес на салфетке">
+<meta property="og:description" content="Умный конструктор бизнес-идей за 15 минут">
+
+<!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<style>
-/* ========================================
-   📐 UX ARCHITECT — Design System Tokens
-   Direction: Retro-Futuristic / Neon-Space
-   ======================================== */
-:root {
-  /* Typography */
-  --font-display: 'Outfit', sans-serif;
-  --font-body: 'Space Grotesk', sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
 
-  /* Spacing Scale (4px base) */
-  --s1:4px;--s2:8px;--s3:12px;--s4:16px;--s5:20px;--s6:24px;--s7:32px;--s8:40px;--s9:48px;--s10:64px;--s11:80px;--s12:96px;
-
-  /* Radius */
-  --r-sm:8px;--r-md:14px;--r-lg:20px;--r-xl:28px;--r-full:9999px;
-
-  /* Shadows */
-  --shadow-sm:0 2px 8px rgba(0,0,0,.15);
-  --shadow-md:0 8px 32px rgba(0,0,0,.2);
-  --shadow-lg:0 16px 64px rgba(0,0,0,.3);
-  --shadow-glow:0 0 40px var(--accent-glow);
-
-  /* Transitions */
-  --ease-out: cubic-bezier(.23,1,.32,1);
-  --ease-spring: cubic-bezier(.34,1.56,.64,1);
-  --dur-fast:.15s;--dur-med:.3s;--dur-slow:.6s;
-}
-
-/* 🌙 Dark Theme (default) */
-[data-theme="dark"] {
-  --bg-primary:#06030e;
-  --bg-secondary:#0d0819;
-  --bg-card:#110d1f;
-  --bg-card-hover:#1a1231;
-  --bg-elevated:rgba(255,255,255,.03);
-  --text-primary:#f0eaf8;
-  --text-secondary:#9b8eb5;
-  --text-muted:#6b5f82;
-  --border:rgba(139,92,246,.12);
-  --border-hover:rgba(139,92,246,.3);
-
-  /* Accent: Electric Violet → Cyber Pink */
-  --accent:#a855f7;
-  --accent-hover:#c084fc;
-  --accent-glow:rgba(168,85,247,.35);
-  --accent2:#ec4899;
-  --accent2-glow:rgba(236,72,153,.25);
-
-  /* Semantic */
-  --success:#10b981;--warning:#f59e0b;--error:#ef4444;--info:#06b6d4;
-
-  /* Neon accents */
-  --neon-violet:#8b5cf6;
-  --neon-pink:#ec4899;
-  --neon-cyan:#06b6d4;
-  --neon-lime:#84cc16;
-
-  /* Gradients */
-  --grad-accent:linear-gradient(135deg,#8b5cf6,#ec4899);
-  --grad-card:linear-gradient(135deg,rgba(139,92,246,.06),rgba(236,72,153,.03));
-  --grad-border:linear-gradient(135deg,#8b5cf6,#ec4899,#06b6d4);
-  --grad-text:linear-gradient(135deg,#f0eaf8 20%,#c4b5fd 50%,#f9a8d4 80%);
-}
-
-/* ☀️ Light Theme */
-[data-theme="light"] {
-  --bg-primary:#faf8ff;
-  --bg-secondary:#f3eeff;
-  --bg-card:#ffffff;
-  --bg-card-hover:#f9f5ff;
-  --bg-elevated:rgba(139,92,246,.04);
-  --text-primary:#1a0e2e;
-  --text-secondary:#5b4f6e;
-  --text-muted:#8b7fa5;
-  --border:rgba(139,92,246,.15);
-  --border-hover:rgba(139,92,246,.35);
-  --accent:#7c3aed;
-  --accent-hover:#6d28d9;
-  --accent-glow:rgba(124,58,237,.2);
-  --accent2:#db2777;
-  --accent2-glow:rgba(219,39,119,.15);
-  --success:#059669;--warning:#d97706;--error:#dc2626;--info:#0891b2;
-  --neon-violet:#7c3aed;--neon-pink:#db2777;--neon-cyan:#0891b2;--neon-lime:#65a30d;
-  --grad-accent:linear-gradient(135deg,#7c3aed,#db2777);
-  --grad-card:linear-gradient(135deg,rgba(124,58,237,.04),rgba(219,39,119,.02));
-  --grad-border:linear-gradient(135deg,#7c3aed,#db2777,#0891b2);
-  --grad-text:linear-gradient(135deg,#1a0e2e 20%,#7c3aed 50%,#db2777 80%);
-  --shadow-glow:0 0 30px rgba(124,58,237,.15);
-}
-
-/* System preference */
-@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --bg-primary:#06030e;--bg-secondary:#0d0819;--bg-card:#110d1f;--text-primary:#f0eaf8;--text-secondary:#9b8eb5;--accent:#a855f7;
-}}
-
-/* ========================================
-   📐 UX ARCHITECT — Base & Layout
-   ======================================== */
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
-body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-primary);line-height:1.6;overflow-x:hidden;transition:background var(--dur-med) var(--ease-out),color var(--dur-med) var(--ease-out)}
-::selection{background:var(--accent);color:#fff}
-:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:var(--r-sm)}
-
-.container{max-width:920px;width:100%;margin:0 auto;padding:0 var(--s5)}
-
-/* ========================================
-   🎨 UI DESIGNER — Header
-   ======================================== */
-header{position:fixed;top:0;left:0;right:0;z-index:200;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 var(--s6);background:color-mix(in srgb,var(--bg-primary) 85%,transparent);backdrop-filter:blur(20px) saturate(1.5);border-bottom:1px solid var(--border);transition:all var(--dur-med)}
-.logo{display:flex;align-items:center;gap:var(--s2);font-family:var(--font-display);font-weight:800;font-size:17px;color:var(--text-primary);text-decoration:none}
-.logo-mark{width:32px;height:32px;border-radius:var(--r-sm);background:var(--grad-accent);display:grid;place-items:center;font-size:16px;box-shadow:var(--shadow-glow);transition:transform var(--dur-med) var(--ease-spring)}
-.logo:hover .logo-mark{transform:rotate(-8deg) scale(1.1)}
-.logo span{background:var(--grad-accent);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-
-.hdr-r{display:flex;align-items:center;gap:var(--s3)}
-.theme-toggle{width:36px;height:36px;border-radius:var(--r-full);border:1px solid var(--border);background:var(--bg-elevated);display:grid;place-items:center;cursor:pointer;font-size:16px;transition:all var(--dur-med) var(--ease-spring)}
-.theme-toggle:hover{border-color:var(--border-hover);transform:rotate(20deg);background:var(--bg-card-hover)}
-.streak-badge,.lvl-badge{padding:2px 10px;border-radius:var(--r-full);font-family:var(--font-mono);font-size:11px;font-weight:700}
-.streak-badge{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.2);color:var(--warning)}
-.lvl-badge{background:var(--grad-accent);color:#fff;font-size:10px}
-.xp-wrap{display:flex;align-items:center;gap:var(--s2)}
-.xp-track{width:80px;height:6px;border-radius:var(--r-full);background:var(--bg-elevated);overflow:hidden}
-.xp-fill{height:100%;border-radius:var(--r-full);background:var(--grad-accent);transition:width .8s var(--ease-out);width:0%}
-.xp-num{font-family:var(--font-mono);font-size:11px;font-weight:600;color:var(--text-secondary)}
-
-/* ========================================
-   🎨 UI DESIGNER — Background
-   ======================================== */
-.bg-mesh{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.6}
-.bg-mesh::before{content:'';position:absolute;top:-20%;left:-10%;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,var(--accent-glow),transparent 70%);filter:blur(80px);animation:meshFloat 20s ease-in-out infinite}
-.bg-mesh::after{content:'';position:absolute;bottom:-15%;right:-10%;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,var(--accent2-glow),transparent 70%);filter:blur(80px);animation:meshFloat 20s ease-in-out infinite reverse}
-@keyframes meshFloat{0%,100%{transform:translate(0,0)}50%{transform:translate(30px,-20px)}}
-
-.bg-grid{position:fixed;inset:0;z-index:0;pointer-events:none;
-  background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);
-  background-size:60px 60px;mask-image:radial-gradient(ellipse at center,black 30%,transparent 70%)}
-
-/* Scanline retro effect */
-.bg-scan{position:fixed;inset:0;z-index:0;pointer-events:none;
-  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(139,92,246,.015) 2px,rgba(139,92,246,.015) 4px);
-  animation:scanMove 8s linear infinite}
-@keyframes scanMove{0%{transform:translateY(0)}100%{transform:translateY(4px)}}
-
-/* ========================================
-   🎨 UI DESIGNER — Hero Section
-   ======================================== */
-.page{position:relative;z-index:1;padding-top:56px}
-
-.hero-s{text-align:center;padding:var(--s11) var(--s5) var(--s9)}
-.hero-mascot{font-size:72px;display:block;margin-bottom:var(--s5);filter:drop-shadow(0 0 20px var(--accent-glow));animation:heroFloat 3s ease-in-out infinite}
-@keyframes heroFloat{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-12px) rotate(2deg)}}
-
-.hero-chip{display:inline-flex;align-items:center;gap:var(--s2);padding:var(--s2) var(--s4);border-radius:var(--r-full);background:var(--bg-elevated);border:1px solid var(--border);font-family:var(--font-mono);font-size:12px;font-weight:500;color:var(--accent);margin-bottom:var(--s6);letter-spacing:.5px}
-.hero-chip .pulse{width:6px;height:6px;border-radius:50%;background:var(--success);animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(16,185,129,.4)}70%{opacity:.7;box-shadow:0 0 0 6px transparent}}
-
-h1{font-family:var(--font-display);font-size:clamp(36px,7vw,64px);font-weight:900;line-height:1.05;letter-spacing:-.02em;margin-bottom:var(--s4)}
-h1 .grad{background:var(--grad-text);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-h1 .accent{background:var(--grad-accent);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-
-.hero-sub{font-size:17px;color:var(--text-secondary);max-width:500px;margin:0 auto var(--s8);line-height:1.7}
-.hero-cta{display:flex;gap:var(--s3);justify-content:center;flex-wrap:wrap;margin-bottom:var(--s10)}
-
-/* ========================================
-   🎨 UI DESIGNER — Buttons
-   ======================================== */
-.btn{display:inline-flex;align-items:center;gap:var(--s2);padding:var(--s4) var(--s7);border-radius:var(--r-md);border:none;font-family:var(--font-body);font-size:15px;font-weight:600;cursor:pointer;transition:all var(--dur-med) var(--ease-spring);position:relative;overflow:hidden}
-.btn-primary{background:var(--grad-accent);color:#fff;box-shadow:var(--shadow-glow),var(--shadow-sm)}
-.btn-primary:hover{transform:translateY(-2px) scale(1.02);box-shadow:0 0 60px var(--accent-glow),var(--shadow-md)}
-.btn-primary:active{transform:translateY(0) scale(.98)}
-.btn-ghost{background:var(--bg-elevated);border:1px solid var(--border);color:var(--text-primary)}
-.btn-ghost:hover{border-color:var(--border-hover);background:var(--bg-card-hover)}
-.btn-sm{padding:var(--s2) var(--s5);font-size:13px;border-radius:var(--r-sm)}
-.btn-chip{padding:var(--s1) var(--s3);border-radius:var(--r-sm);font-size:12px;font-weight:600;border:1px solid var(--border);background:var(--bg-elevated);color:var(--accent);cursor:pointer;transition:all var(--dur-fast)}
-.btn-chip:hover,.btn-chip.sel{border-color:var(--accent);background:rgba(139,92,246,.1);box-shadow:0 0 12px var(--accent-glow)}
-
-/* ✨ Whimsy: Shimmer on primary button */
-.btn-primary::after{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);transition:left .6s var(--ease-out)}
-.btn-primary:hover::after{left:120%}
-
-/* ========================================
-   🎨 UI DESIGNER — Feature Grid
-   ======================================== */
-.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s3)}
-.feat{padding:var(--s6) var(--s5);border-radius:var(--r-lg);background:var(--grad-card);border:1px solid var(--border);text-align:center;transition:all var(--dur-med) var(--ease-out);cursor:default;position:relative;overflow:hidden}
-.feat::before{content:'';position:absolute;inset:0;border-radius:var(--r-lg);opacity:0;background:var(--grad-accent);transition:opacity var(--dur-med);z-index:0}
-.feat:hover{border-color:var(--border-hover);transform:translateY(-4px)}
-.feat:hover::before{opacity:.04}
-.feat>*{position:relative;z-index:1}
-.feat-icon{font-size:36px;display:block;margin-bottom:var(--s2);transition:transform var(--dur-med) var(--ease-spring)}
-.feat:hover .feat-icon{transform:scale(1.15) rotate(-5deg)}
-.feat-title{font-family:var(--font-display);font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:2px}
-.feat-desc{font-size:12px;color:var(--text-secondary);line-height:1.4}
-
-/* ========================================
-   📐 UX ARCHITECT — Game Bar
-   ======================================== */
-.gbar{position:fixed;bottom:0;left:0;right:0;z-index:200;background:color-mix(in srgb,var(--bg-primary) 90%,transparent);backdrop-filter:blur(20px);border-top:1px solid var(--border);padding:var(--s3) var(--s6);display:none;align-items:center;gap:var(--s4);transition:all var(--dur-med)}
-.gbar.on{display:flex}
-.gsteps{display:flex;gap:3px;flex:1}
-.gs{height:5px;border-radius:var(--r-full);background:var(--bg-elevated);flex:1;transition:all var(--dur-slow) var(--ease-out)}
-.gs.done{background:var(--grad-accent)}
-.gs.cur{background:var(--accent);box-shadow:0 0 12px var(--accent-glow);animation:gsPulse 2s infinite}
-@keyframes gsPulse{0%,100%{box-shadow:0 0 12px var(--accent-glow)}50%{box-shadow:0 0 24px var(--accent-glow)}}
-
-/* ========================================
-   🎨 UI DESIGNER — Quest Cards
-   ======================================== */
-.sec{display:none;animation:secIn var(--dur-slow) var(--ease-out)}
-.sec.active{display:block}
-@keyframes secIn{from{opacity:0;transform:translateY(24px) scale(.98)}to{opacity:1;transform:none}}
-
-.qcard{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-xl);padding:var(--s9) var(--s8);position:relative;overflow:hidden;box-shadow:var(--shadow-lg);transition:border-color var(--dur-med)}
-.qcard:hover{border-color:var(--border-hover)}
-/* Gradient top line */
-.qcard::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--grad-border)}
-/* Ghost mascot */
-.qcard-ghost{position:absolute;top:var(--s4);right:var(--s5);font-size:48px;opacity:.08;pointer-events:none;animation:ghostDrift 5s ease-in-out infinite}
-@keyframes ghostDrift{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-8px) rotate(3deg)}}
-
-.q-header{display:flex;align-items:center;gap:var(--s3);margin-bottom:var(--s5);flex-wrap:wrap}
-.q-num{width:42px;height:42px;border-radius:var(--r-md);display:grid;place-items:center;font-family:var(--font-display);font-size:18px;font-weight:900;background:var(--grad-accent);color:#fff;box-shadow:var(--shadow-glow)}
-.q-tag{padding:var(--s1) var(--s3);border-radius:var(--r-full);font-family:var(--font-mono);font-size:11px;font-weight:600;background:var(--bg-elevated);border:1px solid var(--border);color:var(--accent)}
-.q-xp{margin-left:auto;padding:var(--s1) var(--s3);border-radius:var(--r-full);font-family:var(--font-mono);font-size:11px;font-weight:700;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.15);color:var(--warning)}
-
-.q-title{font-family:var(--font-display);font-size:26px;font-weight:800;margin-bottom:var(--s2);display:flex;align-items:center;gap:var(--s3)}
-.q-desc{font-size:15px;color:var(--text-secondary);line-height:1.7;margin-bottom:var(--s5)}
-.q-hint{display:flex;gap:var(--s3);padding:var(--s4) var(--s5);border-radius:var(--r-md);background:var(--grad-card);border:1px solid var(--border);margin-bottom:var(--s5);font-size:13px;color:var(--text-secondary);line-height:1.5}
-.q-hint .hi{font-size:20px;flex-shrink:0}
-.q-nav{display:flex;justify-content:space-between;align-items:center;margin-top:var(--s7);padding-top:var(--s5);border-top:1px solid var(--border)}
-
-/* ========================================
-   🎨 UI DESIGNER — Forms
-   ======================================== */
-textarea,input[type=text],input[type=number]{width:100%;padding:var(--s4) var(--s5);border-radius:var(--r-md);border:1.5px solid var(--border);background:var(--bg-secondary);color:var(--text-primary);font-family:var(--font-body);font-size:15px;line-height:1.6;resize:none;transition:all var(--dur-med) var(--ease-out)}
-textarea:focus,input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow)}
-textarea::placeholder,input::placeholder{color:var(--text-muted)}
-label.fl{font-family:var(--font-mono);font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:var(--s2);display:block;letter-spacing:.3px}
-
-/* ========================================
-   🎨 UI DESIGNER — Niche Grid
-   ======================================== */
-.niche-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--s3);margin-bottom:var(--s5)}
-.niche-card{padding:var(--s5) var(--s3);border-radius:var(--r-lg);background:var(--bg-elevated);border:2px solid transparent;text-align:center;cursor:pointer;transition:all var(--dur-med) var(--ease-spring);position:relative}
-.niche-card:hover{background:var(--bg-card-hover);border-color:var(--border-hover);transform:translateY(-3px)}
-.niche-card.selected{border-color:var(--accent);background:rgba(139,92,246,.08);box-shadow:0 0 20px var(--accent-glow)}
-.niche-card.selected::after{content:'\2713';position:absolute;top:6px;right:6px;width:18px;height:18px;border-radius:50%;background:var(--accent);color:#fff;font-size:11px;display:grid;place-items:center}
-.nc-icon{font-size:32px;display:block;margin-bottom:var(--s2);transition:transform var(--dur-med) var(--ease-spring)}
-.niche-card:hover .nc-icon{transform:scale(1.2) rotate(-5deg)}
-.nc-name{font-family:var(--font-display);font-size:13px;font-weight:700;color:var(--text-primary)}
-.nc-sub{font-size:10px;color:var(--text-muted);margin-top:2px}
-
-/* ========================================
-   🎨 UI DESIGNER — Offers
-   ======================================== */
-.offer-card{padding:var(--s4) var(--s5);border-radius:var(--r-md);background:var(--grad-card);border:1px solid var(--border);cursor:pointer;transition:all var(--dur-med);position:relative;margin-bottom:var(--s3)}
-.offer-card:hover{border-color:var(--border-hover);background:var(--bg-card-hover)}
-.offer-card.chosen{border-color:var(--accent);box-shadow:0 0 16px var(--accent-glow)}
-.offer-card.chosen::before{content:'\2713';position:absolute;top:var(--s3);right:var(--s3);color:var(--accent);font-weight:900;font-size:16px}
-.offer-label{font-family:var(--font-mono);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent);margin-bottom:var(--s1)}
-.offer-text{font-size:15px;font-weight:500;color:var(--text-primary);line-height:1.5}
-
-.slogan-block{margin:var(--s4) 0;padding:var(--s4);border-radius:var(--r-md);background:rgba(236,72,153,.04);border:1px solid rgba(236,72,153,.12);text-align:center}
-.slogan-label{font-family:var(--font-mono);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent2);margin-bottom:var(--s1)}
-.slogan-text{font-family:var(--font-display);font-size:18px;font-weight:700;color:var(--text-primary);font-style:italic}
-
-/* ========================================
-   🎨 UI DESIGNER — Price Slider + Dashboard
-   ======================================== */
-.price-display{text-align:center;margin:var(--s5) 0}
-.price-big{font-family:var(--font-display);font-size:48px;font-weight:900;background:var(--grad-text);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.price-sub{font-size:13px;color:var(--text-muted)}
-
-input[type=range]{width:100%;-webkit-appearance:none;height:8px;border-radius:var(--r-full);background:var(--grad-accent);outline:none;cursor:pointer;margin:var(--s3) 0}
-input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;border-radius:50%;background:var(--text-primary);border:3px solid var(--accent);box-shadow:var(--shadow-glow);cursor:pointer;transition:all var(--dur-fast) var(--ease-spring)}
-input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2);box-shadow:0 0 20px var(--accent-glow)}
-.price-labels{display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:10px;color:var(--text-muted)}
-
-.dash{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s3);margin:var(--s5) 0}
-.dash-card{padding:var(--s5) var(--s3);border-radius:var(--r-lg);background:var(--bg-elevated);border:1px solid var(--border);text-align:center;transition:all var(--dur-med)}
-.dash-card:hover{border-color:var(--border-hover)}
-.dash-val{font-family:var(--font-display);font-size:24px;font-weight:800;margin-bottom:2px}
-.dash-lbl{font-family:var(--font-mono);font-size:10px;color:var(--text-muted);letter-spacing:.5px}
-
-/* Bar chart */
-.bars{display:flex;align-items:flex-end;gap:var(--s2);height:120px;margin:var(--s5) 0;padding:0 var(--s5)}
-.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px}
-.bar-fill{width:100%;border-radius:var(--r-sm) var(--r-sm) 0 0;background:var(--grad-accent);transition:height .8s var(--ease-out);min-height:4px;position:relative;overflow:hidden}
-/* ✨ Whimsy: Shimmer in bars */
-.bar-fill::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);animation:barShimmer 3s ease-in-out infinite}
-@keyframes barShimmer{0%{left:-100%}50%{left:100%}100%{left:100%}}
-.bar-lbl{font-family:var(--font-mono);font-size:9px;color:var(--text-muted)}
-.bar-val{font-family:var(--font-mono);font-size:10px;font-weight:700;color:var(--text-primary)}
-
-/* ========================================
-   🎨 UI DESIGNER — Radar
-   ======================================== */
-.radar-wrap{display:flex;gap:var(--s6);align-items:flex-start;margin:var(--s5) 0;flex-wrap:wrap}
-.radar-svg{width:220px;height:220px;flex-shrink:0}
-.radar-list{flex:1;min-width:200px;display:flex;flex-direction:column;gap:var(--s2)}
-.radar-item{padding:var(--s3) var(--s4);border-radius:var(--r-md);background:var(--bg-elevated);border:1px solid var(--border);transition:all var(--dur-med)}
-.radar-item:hover{border-color:var(--border-hover)}
-.radar-item-title{font-family:var(--font-display);font-size:13px;font-weight:700;display:flex;align-items:center;gap:var(--s2)}
-.radar-item-desc{font-size:12px;color:var(--text-secondary);margin-top:2px;line-height:1.4}
-.radar-score{padding:1px 8px;border-radius:var(--r-full);font-family:var(--font-mono);font-size:10px;font-weight:700;background:rgba(139,92,246,.1);color:var(--accent)}
-
-/* ========================================
-   🎨 UI DESIGNER — Competitor Table
-   ======================================== */
-.comp-table{width:100%;border-collapse:separate;border-spacing:0;margin:var(--s4) 0;border-radius:var(--r-md);overflow:hidden;border:1px solid var(--border)}
-.comp-table th{padding:var(--s3);background:var(--bg-elevated);font-family:var(--font-mono);font-size:11px;font-weight:700;color:var(--accent);text-align:left;border-bottom:1px solid var(--border)}
-.comp-table td{padding:var(--s3);font-size:13px;border-bottom:1px solid rgba(255,255,255,.02)}
-.comp-table tr:last-child td{border-bottom:none}
-.comp-you{background:rgba(139,92,246,.04)}
-.comp-you-tag{color:var(--accent);font-weight:700}
-
-/* ========================================
-   🎨 UI DESIGNER — Delegation Matrix
-   ======================================== */
-.deleg-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s3);margin:var(--s4) 0}
-.deleg-col{border-radius:var(--r-lg);background:var(--bg-elevated);border:1px solid var(--border);padding:var(--s4);min-height:200px}
-.deleg-col-title{font-family:var(--font-mono);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:var(--s3);display:flex;align-items:center;gap:var(--s2)}
-.dc-me .deleg-col-title{color:var(--accent)}
-.dc-asst .deleg-col-title{color:var(--info)}
-.dc-auto .deleg-col-title{color:var(--success)}
-.deleg-item{padding:var(--s2) var(--s3);border-radius:var(--r-sm);background:var(--bg-card);margin-bottom:var(--s2);font-size:13px;cursor:pointer;transition:all var(--dur-med) var(--ease-spring);display:flex;align-items:center;justify-content:space-between;border:1px solid transparent}
-.deleg-item:hover{border-color:var(--border-hover);transform:translateX(4px);background:var(--bg-card-hover)}
-.deleg-item .di-arrow{font-size:10px;color:var(--text-muted);opacity:0;transition:opacity var(--dur-fast)}
-.deleg-item:hover .di-arrow{opacity:1}
-
-/* ========================================
-   🎨 UI DESIGNER — Passport
-   ======================================== */
-.passport-wrap{border-radius:var(--r-xl);padding:2px;background:var(--grad-border);background-size:300% 300%;animation:borderAnim 4s linear infinite}
-@keyframes borderAnim{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
-.passport{background:var(--bg-card);border-radius:calc(var(--r-xl) - 2px);padding:var(--s9) var(--s8);position:relative;overflow:hidden}
-.passport::after{content:'';position:absolute;top:-40%;right:-20%;width:350px;height:350px;border-radius:50%;background:radial-gradient(circle,var(--accent-glow),transparent 70%);pointer-events:none;opacity:.3}
-.pp-title{text-align:center;font-family:var(--font-display);font-size:28px;font-weight:900;margin-bottom:var(--s1);background:var(--grad-text);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.pp-sub{text-align:center;font-family:var(--font-mono);font-size:12px;color:var(--text-muted);margin-bottom:var(--s8)}
-.pp-sect{margin-bottom:var(--s4)}
-.pp-lbl{font-family:var(--font-mono);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:var(--s1)}
-.pp-val{font-size:15px;color:var(--text-primary);line-height:1.6}
-.pp-div{height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:var(--s5) 0}
-.pp-mets{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--s3)}
-.pp-met{text-align:center;padding:var(--s4) var(--s2);border-radius:var(--r-md);background:var(--bg-elevated)}
-.pp-met .pmv{font-family:var(--font-display);font-size:22px;font-weight:800;color:var(--accent)}
-.pp-met .pml{font-family:var(--font-mono);font-size:9px;color:var(--text-muted);margin-top:2px;letter-spacing:.5px}
-.pp-offer-block{padding:var(--s5);border-radius:var(--r-md);background:var(--grad-card);border:1px solid var(--border);margin:var(--s4) 0;text-align:center;font-size:15px;font-weight:600;color:var(--text-primary);line-height:1.6}
-.pp-slogan{text-align:center;font-family:var(--font-display);font-size:20px;font-weight:700;background:var(--grad-accent);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:var(--s3) 0;font-style:italic}
-
-/* ========================================
-   ✨ WHIMSY INJECTOR — Achievements
-   ======================================== */
-.ach{position:fixed;top:68px;right:var(--s5);z-index:300;padding:var(--s4) var(--s5);border-radius:var(--r-md);background:var(--bg-card);border:1px solid rgba(245,158,11,.25);box-shadow:var(--shadow-lg),0 0 30px rgba(245,158,11,.08);display:flex;align-items:center;gap:var(--s3);transform:translateX(140%);transition:transform .5s var(--ease-spring);backdrop-filter:blur(20px)}
-.ach.show{transform:translateX(0)}
-.ach-i{font-size:30px}
-.ach-t{font-family:var(--font-mono);font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--warning)}
-.ach-n{font-family:var(--font-display);font-size:14px;font-weight:700;color:var(--text-primary);margin-top:1px}
-
-/* ✨ Reaction pop */
-.react{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);font-size:96px;pointer-events:none;z-index:500;opacity:0}
-.react.pop{animation:rpop 1s var(--ease-spring) forwards}
-@keyframes rpop{0%{opacity:0;transform:translate(-50%,-50%) scale(.2)}20%{opacity:1;transform:translate(-50%,-50%) scale(1.3) rotate(10deg)}50%{transform:translate(-50%,-50%) scale(1)}80%{opacity:1}100%{opacity:0;transform:translate(-50%,-60%) scale(.6)}}
-
-/* ✨ Floating emojis */
-.femoji{position:fixed;z-index:300;pointer-events:none;font-size:22px;animation:fup 2s var(--ease-out) forwards}
-@keyframes fup{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-90px) scale(.4)}}
-
-/* ✨ Confetti */
-.conf{position:fixed;z-index:400;pointer-events:none;animation:confF 3s ease-in forwards}
-@keyframes confF{0%{transform:translateY(-10px) rotate(0);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
-
-/* ✨ Whimsy: Cursor trail (subtle) */
-.cursor-dot{position:fixed;width:6px;height:6px;border-radius:50%;background:var(--accent);pointer-events:none;z-index:999;opacity:0;transition:opacity .3s}
-body:hover .cursor-dot{opacity:.4}
-
-/* ========================================
-   📐 UX ARCHITECT — Responsive
-   ======================================== */
-@media(max-width:768px){
-  .feat-grid,.niche-grid{grid-template-columns:repeat(2,1fr)}
-  .dash{grid-template-columns:1fr}
-  .pp-mets{grid-template-columns:repeat(2,1fr)}
-  .deleg-cols{grid-template-columns:1fr}
-  .radar-wrap{flex-direction:column;align-items:center}
-  .qcard{padding:var(--s7) var(--s5)}
-  .passport{padding:var(--s7) var(--s5)}
-  header{padding:0 var(--s4)}
-  h1{font-size:clamp(28px,8vw,48px)}
-}
-@media(max-width:480px){.feat-grid,.niche-grid{grid-template-columns:1fr}}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0s!important;transition-duration:0s!important}}
-</style>
+<!-- Styles -->
+<link rel="stylesheet" href="css/design-system.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/hero.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/animations.css">
 </head>
 <body>
 
-<canvas id="bg3d" style="position:fixed;inset:0;z-index:0;pointer-events:none"></canvas>
-<div class="bg-grid"></div>
+<!-- 3D Background -->
+<div id="vanta-bg"></div>
 <div class="bg-scan"></div>
 
-<!-- Unicorn Studio slot (replace YOUR_PROJECT_ID with your unicorn.studio project) -->
-<!-- <div data-us-project="YOUR_PROJECT_ID" data-us-scale="1" data-us-dpi="1.5" data-us-lazyload="true" style="position:fixed;inset:0;z-index:0;pointer-events:none"></div> -->
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script>
-// 3D Background — floating geometric shapes
-(function(){
-const canvas=document.getElementById('bg3d');
-const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});
-renderer.setSize(window.innerWidth,window.innerHeight);
-renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
-
-const scene=new THREE.Scene();
-const camera=new THREE.PerspectiveCamera(60,window.innerWidth/window.innerHeight,.1,100);
-camera.position.z=30;
-
-// Materials
-const matV=new THREE.MeshStandardMaterial({color:0x8b5cf6,wireframe:true,transparent:true,opacity:.12});
-const matP=new THREE.MeshStandardMaterial({color:0xec4899,wireframe:true,transparent:true,opacity:.1});
-const matC=new THREE.MeshStandardMaterial({color:0x06b6d4,wireframe:true,transparent:true,opacity:.08});
-
-// Geometries
-const shapes=[];
-const geos=[
-  new THREE.IcosahedronGeometry(2,1),
-  new THREE.OctahedronGeometry(1.5,0),
-  new THREE.TorusGeometry(1.5,.4,8,16),
-  new THREE.TetrahedronGeometry(1.2,0),
-  new THREE.DodecahedronGeometry(1,0),
-  new THREE.TorusKnotGeometry(.8,.3,64,8),
-];
-const mats=[matV,matP,matC,matV,matP,matC];
-
-for(let i=0;i<18;i++){
-  const g=geos[i%geos.length];
-  const m=mats[i%mats.length];
-  const mesh=new THREE.Mesh(g,m);
-  mesh.position.set((Math.random()-.5)*50,(Math.random()-.5)*35,(Math.random()-.5)*20-5);
-  mesh.rotation.set(Math.random()*Math.PI,Math.random()*Math.PI,Math.random()*Math.PI);
-  mesh.userData={rotSpeed:{x:(Math.random()-.5)*.005,y:(Math.random()-.5)*.005,z:(Math.random()-.5)*.003},floatSpeed:Math.random()*.0005+.0002,floatOffset:Math.random()*Math.PI*2};
-  scene.add(mesh);shapes.push(mesh);
-}
-
-// Lights
-const light1=new THREE.PointLight(0x8b5cf6,.6,50);light1.position.set(10,10,10);scene.add(light1);
-const light2=new THREE.PointLight(0xec4899,.4,50);light2.position.set(-10,-10,5);scene.add(light2);
-scene.add(new THREE.AmbientLight(0x333333,.3));
-
-// Mouse parallax
-let mouseX=0,mouseY=0;
-document.addEventListener('mousemove',e=>{mouseX=(e.clientX/window.innerWidth-.5)*2;mouseY=(e.clientY/window.innerHeight-.5)*2});
-
-// Animate
-let time=0;
-function animate(){
-  requestAnimationFrame(animate);
-  time+=.01;
-  shapes.forEach(s=>{
-    s.rotation.x+=s.userData.rotSpeed.x;
-    s.rotation.y+=s.userData.rotSpeed.y;
-    s.rotation.z+=s.userData.rotSpeed.z;
-    s.position.y+=Math.sin(time+s.userData.floatOffset)*s.userData.floatSpeed*2;
-  });
-  camera.position.x+=(mouseX*2-camera.position.x)*.02;
-  camera.position.y+=(-mouseY*2-camera.position.y)*.02;
-  camera.lookAt(scene.position);
-  renderer.render(scene,camera);
-}
-animate();
-
-window.addEventListener('resize',()=>{
-  camera.aspect=window.innerWidth/window.innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth,window.innerHeight);
-});
-})();
-</script>
-
+<!-- Header -->
 <header>
-<a class="logo" href="#"><div class="logo-mark">N</div>Napkin<span>Idea</span></a>
-<div class="hdr-r">
-<button class="theme-toggle" id="themeBtn" onclick="toggleTheme()" aria-label="Toggle theme">🌙</button>
-<div class="streak-badge" id="streak">🔥 0</div>
-<div class="lvl-badge" id="lvlB">Lvl 1</div>
-<div class="xp-wrap"><div class="xp-track"><div class="xp-fill" id="xpF"></div></div><div class="xp-num" id="xpL">0 XP</div></div>
-</div>
+  <a class="logo" href="#"><div class="logo-mark">N</div>Napkin<span>Idea</span></a>
+  <div class="hdr-r">
+    <button class="theme-toggle" id="themeBtn" aria-label="Переключить тему">🌙</button>
+    <div class="streak-badge" id="streak">🔥 0</div>
+    <div class="lvl-badge" id="lvlB">Lvl 1</div>
+    <div class="xp-wrap">
+      <div class="xp-track"><div class="xp-fill" id="xpF"></div></div>
+      <div class="xp-num" id="xpL">0 XP</div>
+    </div>
+  </div>
 </header>
 
-<div class="ach" id="ach"><div class="ach-i" id="achI"></div><div><div class="ach-t">Achievement!</div><div class="ach-n" id="achN"></div></div></div>
+<!-- Achievement popup -->
+<div class="ach" id="ach">
+  <div class="ach-i" id="achI"></div>
+  <div><div class="ach-t">Достижение!</div><div class="ach-n" id="achN"></div></div>
+</div>
+<!-- Reaction -->
 <div class="react" id="react"></div>
 
-<div class="gbar" id="gbar"><div class="gsteps" id="gsteps"></div><div style="font-family:var(--font-mono);font-size:12px;font-weight:700;color:var(--warning)" id="gxp">★ 0</div></div>
+<!-- Game bar -->
+<div class="gbar" id="gbar">
+  <div class="gsteps" id="gsteps"></div>
+  <div style="font-family:var(--font-mono);font-size:12px;font-weight:700;color:var(--warning)" id="gxp">★ 0</div>
+</div>
 
 <div class="page">
 
-<!-- HERO -->
-<div class="hero-s" id="heroS"><div class="container">
-<span class="hero-mascot">🚀</span>
-<div class="hero-chip"><span class="pulse"></span>AI-POWERED BUSINESS BUILDER</div>
-<h1><span class="grad">Собери бизнес<br>на салфетке</span><br><span class="accent">за 15 минут</span></h1>
-<p class="hero-sub">Выбери нишу — получи офферы, финмодель, маркетинговую стратегию и конкурентный анализ. Автоматически.</p>
-<div class="hero-cta">
-<button class="btn btn-primary" onclick="startGame()">⚡ Начать квест</button>
-<button class="btn btn-ghost" onclick="document.querySelector('.feat-grid').scrollIntoView({behavior:'smooth'})">Что внутри?</button>
+  <!-- ==================== HERO ==================== -->
+  <div class="hero-s" id="heroS">
+    <div class="container">
+      <span class="hero-mascot">🚀</span>
+      <div class="hero-chip"><span class="pulse"></span>Умный конструктор бизнес-идей</div>
+      <h1>
+        <span class="grad">Собери бизнес<br>на салфетке</span><br>
+        <span class="accent">за 15 минут</span>
+      </h1>
+      <p class="hero-sub">Выбери нишу — получи готовые офферы, финмодель, маркетинговую стратегию и конкурентный анализ. Автоматически.</p>
+      <div class="hero-cta">
+        <button class="btn btn-primary" onclick="startGame()">⚡ Начать бесплатно</button>
+        <button class="btn btn-ghost" onclick="document.querySelector('.feat-grid').scrollIntoView({behavior:'smooth'})">Что внутри?</button>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat"><div class="hero-stat-num">12</div><div class="hero-stat-label">ниш</div></div>
+        <div class="hero-stat"><div class="hero-stat-num">15</div><div class="hero-stat-label">минут</div></div>
+        <div class="hero-stat"><div class="hero-stat-num">9</div><div class="hero-stat-label">шагов</div></div>
+      </div>
+
+      <!-- Features -->
+      <div class="feat-grid">
+        <div class="feat" data-tilt data-tilt-max="5"><span class="feat-icon">🧬</span><div class="feat-title">12 ниш</div><div class="feat-desc">Готовая база знаний для каждой</div></div>
+        <div class="feat" data-tilt data-tilt-max="5"><span class="feat-icon">💎</span><div class="feat-title">Умные офферы</div><div class="feat-desc">3 ценностных предложения</div></div>
+        <div class="feat" data-tilt data-tilt-max="5"><span class="feat-icon">📊</span><div class="feat-title">Живой дашборд</div><div class="feat-desc">Графики в реальном времени</div></div>
+        <div class="feat" data-tilt data-tilt-max="5"><span class="feat-icon">🎯</span><div class="feat-title">Маркетинг-радар</div><div class="feat-desc">Каналы для твоей ниши</div></div>
+        <div class="feat" data-tilt data-tilt-max="5"><span class="feat-icon">⚔️</span><div class="feat-title">Конкуренты</div><div class="feat-desc">Ты vs рынок</div></div>
+        <div class="feat" data-tilt data-tilt-max="5"><span class="feat-icon">📜</span><div class="feat-title">Бизнес-паспорт</div><div class="feat-desc">Экспорт в PNG</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== QUEST AREA ==================== -->
+  <div id="qArea" style="display:none;padding:80px 20px 120px;min-height:100vh">
+    <div class="container">
+
+      <!-- S1: Niche -->
+      <div class="sec active" id="s1"><div class="qcard"><div class="qcard-ghost">🌱</div>
+        <div class="q-header"><div class="q-num">1</div><div class="q-tag">🌱 Ниша</div><div class="q-xp">+10 XP</div></div>
+        <div class="q-title">🚀 Выбери свою нишу</div>
+        <div class="q-desc">Кликни на то, что тебе ближе. Мы подгрузим базу знаний.</div>
+        <div class="niche-grid" id="nicheGrid"></div>
+        <div style="text-align:center;margin:var(--s3) 0;font-size:var(--text-sm);color:var(--text-muted)">Или опиши свою:</div>
+        <input type="text" id="customNiche" placeholder="Например: делаю украшения из эпоксидки">
+        <div class="q-nav"><button class="btn btn-ghost btn-sm" onclick="backHero()">← На главную</button><button class="btn btn-primary btn-sm" onclick="next(2)">Далее →</button></div>
+      </div></div>
+
+      <!-- S2: Audience -->
+      <div class="sec" id="s2"><div class="qcard"><div class="qcard-ghost">🎯</div>
+        <div class="q-header"><div class="q-num">2</div><div class="q-tag">🎯 Аудитория</div><div class="q-xp">+10 XP</div></div>
+        <div class="q-title">🕵️ Для кого конкретно?</div>
+        <div class="q-desc">Выбери из рекомендованных или опиши своего клиента.</div>
+        <div id="audSug"></div>
+        <textarea id="a2" rows="2" maxlength="300" placeholder="Или опиши своего клиента..."></textarea>
+        <div class="q-nav"><button class="btn btn-ghost btn-sm" onclick="prev(1)">←</button><button class="btn btn-primary btn-sm" onclick="next(3)">Далее →</button></div>
+      </div></div>
+
+      <!-- S3: Problem -->
+      <div class="sec" id="s3"><div class="qcard"><div class="qcard-ghost">🔥</div>
+        <div class="q-header"><div class="q-num">3</div><div class="q-tag">🔥 Боль</div><div class="q-xp">+10 XP</div></div>
+        <div class="q-title">🤯 Что бесит клиента?</div>
+        <div class="q-desc">Какая проблема не даёт ему спать?</div>
+        <div id="probSug"></div>
+        <textarea id="a3" rows="2" maxlength="400" placeholder="Или опиши проблему сам..."></textarea>
+        <div class="q-nav"><button class="btn btn-ghost btn-sm" onclick="prev(2)">←</button><button class="btn btn-primary btn-sm" onclick="next(4)">Далее →</button></div>
+      </div></div>
+
+      <!-- S4: Offers -->
+      <div class="sec" id="s4"><div class="qcard"><div class="qcard-ghost">💎</div>
+        <div class="q-header"><div class="q-num">4</div><div class="q-tag">💎 Офферы</div><div class="q-xp">+20 XP</div></div>
+        <div class="q-title">🤩 Твоё убойное предложение</div>
+        <div class="q-desc">3 варианта оффера для твоей ниши. Выбери лучший или напиши свой.</div>
+        <div id="offersList"></div>
+        <div class="slogan-block"><div class="slogan-label">Твой слоган</div><div class="slogan-text" id="sloganText"></div></div>
+        <textarea id="a4custom" rows="2" maxlength="300" placeholder="Или напиши свой оффер..."></textarea>
+        <div class="q-nav"><button class="btn btn-ghost btn-sm" onclick="prev(3)">←</button><button class="btn btn-primary btn-sm" onclick="next(5)">Далее →</button></div>
+      </div></div>
+
+      <!-- S5: Pricing -->
+      <div class="sec" id="s5"><div class="qcard"><div class="qcard-ghost">💰</div>
+        <div class="q-header"><div class="q-num">5</div><div class="q-tag">💰 Финмодель</div><div class="q-xp">+25 XP</div></div>
+        <div class="q-title">🤑 Покажи мне деньги!</div>
+        <div class="q-desc">Двигай слайдер — смотри как меняется выручка.</div>
+        <div class="price-display"><div class="price-big" id="priceVal">5 000 ₽</div><div class="price-sub">цена за 1 услугу</div></div>
+        <input type="range" id="priceSlider" min="500" max="50000" step="500" value="5000" oninput="updateDash()">
+        <div class="price-labels"><span id="plMin">500 ₽</span><span id="plMid">бенчмарк</span><span id="plMax">50 000 ₽</span></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--s3);margin:var(--s4) 0">
+          <div><label class="fl">📦 Штук в месяц</label><input type="number" id="unitsIn" value="15" oninput="updateDash()"></div>
+          <div><label class="fl">⏰ Часов на 1 шт</label><input type="number" id="hrsIn" value="2" oninput="updateDash()"></div>
+        </div>
+        <div class="dash">
+          <div class="dash-card"><div class="dash-val" style="color:var(--accent)" id="dRev">—</div><div class="dash-lbl">ВЫРУЧКА/МЕС</div></div>
+          <div class="dash-card"><div class="dash-val" style="color:var(--success)" id="dProf">—</div><div class="dash-lbl">ПРИБЫЛЬ/МЕС</div></div>
+          <div class="dash-card"><div class="dash-val" style="color:var(--warning)" id="dRate">—</div><div class="dash-lbl">₽/ЧАС</div></div>
+        </div>
+        <div style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted);margin:var(--s4) 0 var(--s2)">📈 ПРОГНОЗ НА 6 МЕСЯЦЕВ</div>
+        <div class="bars" id="barsChart"></div>
+        <div class="q-nav"><button class="btn btn-ghost btn-sm" onclick="prev(4)">←</button><button class="btn btn-primary btn-sm" onclick="next(6)">Далее →</button></div>
+      </div></div>
+
+      <!-- S6: Radar -->
+      <div class="sec" id="s6"><div class="qcard"><div class="qcard-ghost">📡</div>
+        <div class="q-header"><div class="q-num">6</div><div class="q-tag">📡 Маркетинг</div><div class="q-xp">+20 XP</div></div>
+        <div class="q-title">📡 Маркетинговый радар</div>
+        <div class="q-desc">Каналы продвижения для твоей ниши.</div>
+        <div class="radar-wrap"><svg class="radar-svg" id="radarSvg" viewBox="0 0 220 220"></svg><div class="radar-list" id="radarList"></div></div>
+        <div class="q-nav"><button class="btn btn-ghost btn-sm" onclick="prev(5)">←</button><button class="btn btn-primary btn-sm" onclick="next(7)">Далее →</button></div>
+      </div></div>
+
+      <!-- S7: Competitors -->
+      <div class="sec" id="s7"><div class="qcard"><div class="qcard-ghost">⚔️</div>
+        <div class="q-header"><div class="q-num">7</div><div class="q-tag">⚔️ Конкуренты</div><div class="q-xp">+15 XP</div></div>
+        <div class="q-title">🔍 Ты vs Конкуренты</div>
+        <div class="q-desc">Как ты выглядишь на фоне рынка.</div>
+        <div id="compBlock"></div>
+        <div class="q-nav"><button class="btn btn-ghost btn-sm" onclick="prev(6)">←</button><button class="btn btn-primary btn-sm" onclick="next(8)">Далее →</button></div>
+      </div></div>
+
+      <!-- S8: Delegation -->
+      <div class="sec" id="s8"><div class="qcard"><div class="qcard-ghost">🤖</div>
+        <div class="q-header"><div class="q-num">8</div><div class="q-tag">⚙️ Делегирование</div><div class="q-xp">+15 XP</div></div>
+        <div class="q-title">🤖 Кто что делает?</div>
+        <div class="q-desc">Кликай на задачу — она переедет в следующую колонку.</div>
+        <div class="deleg-cols" id="delegCols"></div>
+        <div class="q-nav"><button class="btn btn-ghost btn-sm" onclick="prev(7)">←</button><button class="btn btn-primary btn-sm" onclick="next(9)">Далее →</button></div>
+      </div></div>
+
+      <!-- S9: Action -->
+      <div class="sec" id="s9"><div class="qcard"><div class="qcard-ghost">⚡</div>
+        <div class="q-header"><div class="q-num">9</div><div class="q-tag">⚡ Действие</div><div class="q-xp">+20 XP</div></div>
+        <div class="q-title">💪 Один шаг. Эта неделя.</div>
+        <div class="q-desc">Не «изучу рынок». Один эксперимент с дедлайном.</div>
+        <div class="q-hint"><span class="hi">🏁</span><span>«До пятницы позвоню 5 потенциальным клиентам» / «Завтра выложу первый пост»</span></div>
+        <textarea id="a9" rows="3" maxlength="300" placeholder="На этой неделе я..."></textarea>
+        <div class="q-nav"><button class="btn btn-ghost btn-sm" onclick="prev(8)">←</button><button class="btn btn-primary btn-sm" onclick="showPassport()">🏆 Получить бизнес-паспорт!</button></div>
+      </div></div>
+
+      <!-- Passport Result -->
+      <div class="sec" id="sResult">
+        <div style="text-align:center;margin-bottom:var(--s6)">
+          <span style="font-size:60px;display:block;animation:heroFloat 1.5s infinite">🎉</span>
+          <h2 style="font-family:var(--font-display);font-size:var(--text-2xl);font-weight:900;margin-top:var(--s3)">Квест пройден!</h2>
+          <p style="color:var(--text-secondary);font-size:14px">Твой бизнес-паспорт готов.</p>
+        </div>
+        <div class="passport-wrap"><div class="passport" id="passCard">
+          <div class="pp-title">📜 Бизнес-паспорт</div>
+          <div class="pp-sub" id="ppNiche"></div>
+          <div class="pp-offer-block" id="ppOffer"></div>
+          <div class="pp-slogan" id="ppSlogan"></div>
+          <div class="pp-div"></div>
+          <div class="pp-sect"><div class="pp-lbl">🎯 Аудитория</div><div class="pp-val" id="ppAud"></div></div>
+          <div class="pp-sect"><div class="pp-lbl">🔥 Проблема</div><div class="pp-val" id="ppProb"></div></div>
+          <div class="pp-div"></div>
+          <div class="pp-mets">
+            <div class="pp-met"><div class="pmv" id="ppPrice">—</div><div class="pml">ЦЕНА</div></div>
+            <div class="pp-met"><div class="pmv" id="ppRev">—</div><div class="pml">ВЫРУЧКА</div></div>
+            <div class="pp-met"><div class="pmv" id="ppProfit">—</div><div class="pml">ПРИБЫЛЬ</div></div>
+            <div class="pp-met"><div class="pmv" id="ppSales">—</div><div class="pml">ПРОДАЖ</div></div>
+          </div>
+          <div class="pp-div"></div>
+          <div class="pp-sect"><div class="pp-lbl">📡 Топ каналы</div><div class="pp-val" id="ppChannels"></div></div>
+          <div class="pp-sect"><div class="pp-lbl">⚙️ Делегирование</div><div id="ppDeleg" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px"></div></div>
+          <div class="pp-div"></div>
+          <div class="pp-sect"><div class="pp-lbl">⚡ Шаг на эту неделю</div><div class="pp-val" id="ppAction" style="font-weight:700;color:var(--accent);font-size:16px"></div></div>
+          <div style="text-align:center;margin-top:var(--s6);font-family:var(--font-mono);font-size:10px;color:var(--text-muted)">NapkinIdea • Умный конструктор бизнес-идей</div>
+        </div></div>
+        <div style="text-align:center;margin-top:var(--s6);display:flex;gap:var(--s3);justify-content:center;flex-wrap:wrap">
+          <button class="btn btn-ghost" onclick="goSec(1)">✏️ Редактировать</button>
+          <button class="btn btn-primary" onclick="dlPNG()">💾 Скачать PNG</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
 </div>
-<div class="feat-grid">
-<div class="feat"><span class="feat-icon">🧬</span><div class="feat-title">12 ниш</div><div class="feat-desc">Готовая база знаний для каждой</div></div>
-<div class="feat"><span class="feat-icon">💎</span><div class="feat-title">AI-офферы</div><div class="feat-desc">3 ценностных предложения</div></div>
-<div class="feat"><span class="feat-icon">📊</span><div class="feat-title">Live-дашборд</div><div class="feat-desc">Графики в реальном времени</div></div>
-<div class="feat"><span class="feat-icon">🎯</span><div class="feat-title">Маркетинг-радар</div><div class="feat-desc">Каналы для твоей ниши</div></div>
-<div class="feat"><span class="feat-icon">⚔️</span><div class="feat-title">Конкуренты</div><div class="feat-desc">Ты vs рынок</div></div>
-<div class="feat"><span class="feat-icon">📜</span><div class="feat-title">Бизнес-паспорт</div><div class="feat-desc">Экспорт в PNG</div></div>
-</div>
-</div></div>
 
-<!-- QUEST AREA -->
-<div id="qArea" style="display:none;padding:80px 20px 120px;min-height:100vh"><div class="container">
+<!-- External libs (CDN) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.topology.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
 
-<!-- S1: NICHE -->
-<div class="sec active" id="s1"><div class="qcard"><div class="qcard-ghost">🌱</div>
-<div class="q-header"><div class="q-num">1</div><div class="q-tag">🌱 Ниша</div><div class="q-xp">+10 XP</div></div>
-<div class="q-title">🚀 Выбери свою нишу</div>
-<div class="q-desc">Кликни на то, что тебе ближе. Мы подгрузим готовую базу знаний.</div>
-<div class="niche-grid" id="nicheGrid"></div>
-<div style="text-align:center;margin:var(--s3) 0;font-size:13px;color:var(--text-muted)">Или опиши свою:</div>
-<input type="text" id="customNiche" placeholder="Например: делаю украшения из эпоксидки">
-<div class="q-nav"><button class="btn btn-ghost btn-sm" onclick="backHero()">← На главную</button><button class="btn btn-primary btn-sm" onclick="next(2)">Далее →</button></div>
-</div></div>
+<!-- App scripts -->
+<script src="js/theme.js"></script>
+<script src="js/data.js"></script>
+<script src="js/generators.js"></script>
+<script src="js/effects.js"></script>
+<script src="js/app.js"></script>
 
-<!-- S2: AUDIENCE -->
-<div class="sec" id="s2"><div class="qcard"><div class="qcard-ghost">🎯</div>
-<div class="q-header"><div class="q-num">2</div><div class="q-tag">🎯 Аудитория</div><div class="q-xp">+10 XP</div></div>
-<div class="q-title">🕵️ Для кого конкретно?</div>
-<div class="q-desc">Выбери из рекомендованных или опиши своего клиента.</div>
-<div id="audSug"></div>
-<textarea id="a2" rows="2" maxlength="300" placeholder="Или опиши своего клиента..."></textarea>
-<div class="q-nav"><button class="btn btn-ghost btn-sm" onclick="prev(1)">←</button><button class="btn btn-primary btn-sm" onclick="next(3)">Далее →</button></div>
-</div></div>
-
-<!-- S3: PROBLEM -->
-<div class="sec" id="s3"><div class="qcard"><div class="qcard-ghost">🔥</div>
-<div class="q-header"><div class="q-num">3</div><div class="q-tag">🔥 Боль</div><div class="q-xp">+10 XP</div></div>
-<div class="q-title">🤯 Что бесит клиента?</div>
-<div class="q-desc">Какая проблема не даёт ему спать?</div>
-<div id="probSug"></div>
-<textarea id="a3" rows="2" maxlength="400" placeholder="Или опиши проблему сам..."></textarea>
-<div class="q-nav"><button class="btn btn-ghost btn-sm" onclick="prev(2)">←</button><button class="btn btn-primary btn-sm" onclick="next(4)">Далее →</button></div>
-</div></div>
-
-<!-- S4: OFFERS -->
-<div class="sec" id="s4"><div class="qcard"><div class="qcard-ghost">💎</div>
-<div class="q-header"><div class="q-num">4</div><div class="q-tag">💎 AI-оффер</div><div class="q-xp">+20 XP</div></div>
-<div class="q-title">🤩 Твоё убойное предложение</div>
-<div class="q-desc">3 варианта оффера для твоей ниши. Выбери лучший или напиши свой.</div>
-<div id="offersList"></div>
-<div class="slogan-block"><div class="slogan-label">Твой слоган</div><div class="slogan-text" id="sloganText"></div></div>
-<textarea id="a4custom" rows="2" maxlength="300" placeholder="Или напиши свой оффер..."></textarea>
-<div class="q-nav"><button class="btn btn-ghost btn-sm" onclick="prev(3)">←</button><button class="btn btn-primary btn-sm" onclick="next(5)">Далее →</button></div>
-</div></div>
-
-<!-- S5: PRICING -->
-<div class="sec" id="s5"><div class="qcard"><div class="qcard-ghost">💰</div>
-<div class="q-header"><div class="q-num">5</div><div class="q-tag">💰 Финмодель</div><div class="q-xp">+25 XP</div></div>
-<div class="q-title">🤑 Покажи мне деньги!</div>
-<div class="q-desc">Двигай слайдер — смотри как меняется выручка.</div>
-<div class="price-display"><div class="price-big" id="priceVal">5 000 ₽</div><div class="price-sub">цена за 1 услугу</div></div>
-<input type="range" id="priceSlider" min="500" max="50000" step="500" value="5000" oninput="updateDash()">
-<div class="price-labels"><span id="plMin">500 ₽</span><span id="plMid">бенчмарк</span><span id="plMax">50 000 ₽</span></div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--s3);margin:var(--s4) 0">
-<div><label class="fl">📦 Штук в месяц</label><input type="number" id="unitsIn" value="15" oninput="updateDash()"></div>
-<div><label class="fl">⏰ Часов на 1 шт</label><input type="number" id="hrsIn" value="2" oninput="updateDash()"></div>
-</div>
-<div class="dash"><div class="dash-card"><div class="dash-val" style="color:var(--accent)" id="dRev">—</div><div class="dash-lbl">ВЫРУЧКА/МЕС</div></div><div class="dash-card"><div class="dash-val" style="color:var(--success)" id="dProf">—</div><div class="dash-lbl">ПРИБЫЛЬ/МЕС</div></div><div class="dash-card"><div class="dash-val" style="color:var(--warning)" id="dRate">—</div><div class="dash-lbl">₽/ЧАС</div></div></div>
-<div style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted);margin:var(--s4) 0 var(--s2)">📈 ПРОГНОЗ НА 6 МЕСЯЦЕВ</div>
-<div class="bars" id="barsChart"></div>
-<div class="q-nav"><button class="btn btn-ghost btn-sm" onclick="prev(4)">←</button><button class="btn btn-primary btn-sm" onclick="next(6)">Далее →</button></div>
-</div></div>
-
-<!-- S6: RADAR -->
-<div class="sec" id="s6"><div class="qcard"><div class="qcard-ghost">📡</div>
-<div class="q-header"><div class="q-num">6</div><div class="q-tag">📡 Маркетинг</div><div class="q-xp">+20 XP</div></div>
-<div class="q-title">📡 Маркетинговый радар</div>
-<div class="q-desc">Каналы продвижения для твоей ниши — с оценкой эффективности.</div>
-<div class="radar-wrap"><svg class="radar-svg" id="radarSvg" viewBox="0 0 220 220"></svg><div class="radar-list" id="radarList"></div></div>
-<div class="q-nav"><button class="btn btn-ghost btn-sm" onclick="prev(5)">←</button><button class="btn btn-primary btn-sm" onclick="next(7)">Далее →</button></div>
-</div></div>
-
-<!-- S7: COMPETITORS -->
-<div class="sec" id="s7"><div class="qcard"><div class="qcard-ghost">⚔️</div>
-<div class="q-header"><div class="q-num">7</div><div class="q-tag">⚔️ Конкуренты</div><div class="q-xp">+15 XP</div></div>
-<div class="q-title">🔍 Ты vs Конкуренты</div>
-<div class="q-desc">Как ты выглядишь на фоне рынка.</div>
-<div id="compBlock"></div>
-<div class="q-nav"><button class="btn btn-ghost btn-sm" onclick="prev(6)">←</button><button class="btn btn-primary btn-sm" onclick="next(8)">Далее →</button></div>
-</div></div>
-
-<!-- S8: DELEGATION -->
-<div class="sec" id="s8"><div class="qcard"><div class="qcard-ghost">🤖</div>
-<div class="q-header"><div class="q-num">8</div><div class="q-tag">⚙️ Делегирование</div><div class="q-xp">+15 XP</div></div>
-<div class="q-title">🤖 Кто что делает?</div>
-<div class="q-desc">Кликай на задачу — она переедет в следующую колонку.</div>
-<div class="deleg-cols" id="delegCols"></div>
-<div class="q-nav"><button class="btn btn-ghost btn-sm" onclick="prev(7)">←</button><button class="btn btn-primary btn-sm" onclick="next(9)">Далее →</button></div>
-</div></div>
-
-<!-- S9: ACTION -->
-<div class="sec" id="s9"><div class="qcard"><div class="qcard-ghost">⚡</div>
-<div class="q-header"><div class="q-num">9</div><div class="q-tag">⚡ Действие</div><div class="q-xp">+20 XP</div></div>
-<div class="q-title">💪 Один шаг. Эта неделя.</div>
-<div class="q-desc">Не «изучу рынок». Один эксперимент с дедлайном.</div>
-<div class="q-hint"><span class="hi">🏁</span><span>«До пятницы позвоню 5 потенциальным клиентам» / «Завтра выложу первый пост с оффером»</span></div>
-<textarea id="a9" rows="3" maxlength="300" placeholder="На этой неделе я..."></textarea>
-<div class="q-nav"><button class="btn btn-ghost btn-sm" onclick="prev(8)">←</button><button class="btn btn-primary btn-sm" onclick="showPassport()">🏆 Получить бизнес-паспорт!</button></div>
-</div></div>
-
-<!-- PASSPORT -->
-<div class="sec" id="sResult">
-<div style="text-align:center;margin-bottom:var(--s6)">
-<span style="font-size:60px;display:block;animation:heroFloat 1.5s infinite">🎉</span>
-<h2 style="font-family:var(--font-display);font-size:24px;font-weight:900;margin-top:var(--s3)">Квест пройден!</h2>
-<p style="color:var(--text-secondary);font-size:14px">Твой бизнес-паспорт готов.</p>
-</div>
-<div class="passport-wrap"><div class="passport" id="passCard">
-<div class="pp-title">📜 Бизнес-паспорт</div>
-<div class="pp-sub" id="ppNiche"></div>
-<div class="pp-offer-block" id="ppOffer"></div>
-<div class="pp-slogan" id="ppSlogan"></div>
-<div class="pp-div"></div>
-<div class="pp-sect"><div class="pp-lbl">🎯 Аудитория</div><div class="pp-val" id="ppAud"></div></div>
-<div class="pp-sect"><div class="pp-lbl">🔥 Проблема</div><div class="pp-val" id="ppProb"></div></div>
-<div class="pp-div"></div>
-<div class="pp-mets">
-<div class="pp-met"><div class="pmv" id="ppPrice">—</div><div class="pml">ЦЕНА</div></div>
-<div class="pp-met"><div class="pmv" id="ppRev">—</div><div class="pml">ВЫРУЧКА</div></div>
-<div class="pp-met"><div class="pmv" id="ppProfit">—</div><div class="pml">ПРИБЫЛЬ</div></div>
-<div class="pp-met"><div class="pmv" id="ppSales">—</div><div class="pml">ПРОДАЖ</div></div>
-</div>
-<div class="pp-div"></div>
-<div class="pp-sect"><div class="pp-lbl">📡 Топ каналы</div><div class="pp-val" id="ppChannels"></div></div>
-<div class="pp-sect"><div class="pp-lbl">⚙️ Делегирование</div><div id="ppDeleg" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px"></div></div>
-<div class="pp-div"></div>
-<div class="pp-sect"><div class="pp-lbl">⚡ Шаг на эту неделю</div><div class="pp-val" id="ppAction" style="font-weight:700;color:var(--accent);font-size:16px"></div></div>
-<div style="text-align:center;margin-top:var(--s6);font-family:var(--font-mono);font-size:10px;color:var(--text-muted)">NapkinIdea.app • Generated with AI</div>
-</div></div>
-<div style="text-align:center;margin-top:var(--s6);display:flex;gap:var(--s3);justify-content:center;flex-wrap:wrap">
-<button class="btn btn-ghost" onclick="goSec(1)">✏️ Редактировать</button>
-<button class="btn btn-primary" onclick="dlPNG()">💾 Скачать PNG</button>
-</div>
-</div>
-
-</div></div>
-</div>
-
-<script>
-// ==================== KNOWLEDGE BASE (same as before) ====================
-const DB={
-video:{name:"Видеомонтаж",icon:"🎬",audiences:["Блогеры 5-50к подписчиков","Эксперты, ведущие курсы","Малый бизнес для соцсетей"],problems:["Тратит 3-5 часов на монтаж одного ролика","Платит 5000₽ фрилансеру, который делает неделю","Не умеет монтировать, контент копится"],priceRange:[1500,5000,15000],channels:[{name:"Telegram-чаты блогеров",score:9,tip:"Найди 5 чатов по теме клиента, предложи 1 бесплатный ролик"},{name:"Сарафанное радио",score:8,tip:"Попроси 3 довольных клиента порекомендовать"},{name:"Портфолио в соцсетях",score:7,tip:"Выложи 10 примеров работ с описанием процесса"},{name:"Биржи фриланса",score:6,tip:"Kwork, FL.ru — начни с дешёвых заказов для отзывов"},{name:"Холодные письма",score:5,tip:"Напиши 20 блогерам без Reels"},{name:"Платная реклама",score:3,tip:"Таргет — дорого, но быстро"}],competitors:[{name:"Фрилансер на Kwork",price:"1-3к",speed:"3-5 дней",quality:"Средне"},{name:"Видеоредактор в штате",price:"50-80к/мес",speed:"Быстро",quality:"Высокое"},{name:"Сам + CapCut",price:"Бесплатно",speed:"3-5 часов",quality:"Низкое"}],tasks:["Монтаж видео","Цветокоррекция","Субтитры","Подбор музыки","Общение с клиентами","Бухгалтерия","Публикация","Поиск клиентов"],offers:["{audience} получит {count} смонтированных Reels за 48 часов в стиле блога","Еженедельный контент-пакет для {audience}: {count} роликов + адаптация под 3 площадки","Полный видео-продакшн для {audience}: от идеи до публикации за 72 часа"],slogans:["Твой контент — наша забота","Reels, которые залетают","Монтаж, который продаёт"]},
-design:{name:"Дизайн",icon:"🎨",audiences:["Стартапы без дизайнера","Малый бизнес для соцсетей","Блогеры для презентаций"],problems:["Дизайн в Canva выглядит как у всех","Нет единого стиля — каждый пост разный","Дизайнер стоит 80к/мес, а задач на 10к"],priceRange:[2000,8000,25000],channels:[{name:"Портфолио Behance/Dribbble",score:8,tip:"Выложи 5 кейсов"},{name:"Соцсети с примерами",score:9,tip:"Посты до/после"},{name:"Партнёрства с SMM",score:7,tip:"Найди SMM-щиков"},{name:"Рекомендации",score:8,tip:"Попроси отметить в соцсетях"},{name:"Биржи",score:5,tip:"Kwork для отзывов"},{name:"Контент-маркетинг",score:6,tip:"Посты о дизайне"}],competitors:[{name:"Canva сам",price:"0-1к",speed:"Быстро",quality:"Шаблонно"},{name:"Фрилансер",price:"3-10к",speed:"2-5 дней",quality:"Средне"},{name:"Дизайн-студия",price:"30-100к",speed:"1-3 нед",quality:"Высокое"}],tasks:["Макеты","Разработка стиля","Правки","Подготовка файлов","Коммуникация","Бухгалтерия","Поиск клиентов","Портфолио"],offers:["Полный визуальный стиль для {audience} за 5 дней: лого + 10 шаблонов + гайд","Ежемесячный дизайн-пакет для {audience}: {count} макетов + правки","Экспресс-дизайн для {audience}: от брифа до файлов за 24 часа"],slogans:["Дизайн, который запоминают","Визуал, который продаёт","Стиль из толпы"]},
-copywriting:{name:"Копирайтинг",icon:"✍️",audiences:["Эксперты для постов","Бизнес для сайтов и рассылок","Блогеры для сторителлинга"],problems:["Нет времени писать — посты раз в неделю","Пишет сам, но тексты не продают","Контент-план есть, а контента нет"],priceRange:[1000,5000,20000],channels:[{name:"Собственный блог",score:9,tip:"Покажи как пишешь"},{name:"Telegram-канал",score:8,tip:"Канал о текстах"},{name:"Рекомендации",score:8,tip:"Довольные клиенты"},{name:"Биржи контента",score:6,tip:"Kwork для старта"},{name:"Партнёрства",score:7,tip:"SMM-щики"},{name:"Холодные",score:5,tip:"Найди блогеров с плохими текстами"}],competitors:[{name:"ChatGPT сам",price:"Бесплатно",speed:"Мгновенно",quality:"Шаблонно"},{name:"Копирайтер-новичок",price:"500-2к",speed:"1-3 дня",quality:"Средне"},{name:"Контент-агентство",price:"15-50к",speed:"1-2 нед",quality:"Высокое"}],tasks:["Тексты","Редактура","Исследование","Контент-план","Коммуникация","Публикация","SEO","Аналитика"],offers:["Контент-пакет для {audience}: {count} постов/мес + план + сторис","Продающий лендинг для {audience} за 3 дня","Ежедневный контент для {audience}: посты, сторис, рассылки"],slogans:["Тексты до конца","Слова, которые продают","Контент без боли"]},
-tutoring:{name:"Репетиторство",icon:"📚",audiences:["Школьники 9-11 классов","Студенты","Взрослые, учащие языки"],problems:["В школе не объясняют","Репетитор 3000/час, 3 раза в нед","Группы не учитывают уровень"],priceRange:[800,2000,5000],channels:[{name:"Сарафанное радио",score:9,tip:"Попроси родителей"},{name:"Школьные чаты",score:8,tip:"Мамские чаты"},{name:"Profi.ru",score:7,tip:"Зарегистрируйся"},{name:"Соцсети",score:6,tip:"Полезные фишки"},{name:"Партнёрства",score:5,tip:"Школы"},{name:"YouTube",score:7,tip:"Бесплатные разборы"}],competitors:[{name:"Бесплатные курсы",price:"0",speed:"Сам",quality:"Без обратной связи"},{name:"Онлайн-школа",price:"5-15к/мес",speed:"По расписанию",quality:"Среднее"},{name:"Частный репетитор",price:"2-5к/час",speed:"Гибко",quality:"Высокое"}],tasks:["Уроки","Материалы","Проверка ДЗ","Общение с родителями","Расписание","Бухгалтерия","Поиск учеников","Саморазвитие"],offers:["Подготовка к ЕГЭ для {audience}: план + {count} занятий/мес + чат","Интенсив для {audience}: до цели за 3 мес с гарантией","Мини-группы для {audience}: 3 чел, {count} занятий/нед"],slogans:["Понятно с первого раза","Знания, которые остаются","Учись с удовольствием"]},
-baking:{name:"Кондитерка",icon:"🎂",audiences:["Мамы для детских праздников","Пары для свадеб","Кафе и рестораны"],problems:["Торт из магазина невкусный","Кондитер берёт 10к+ и делает неделю","Хочется уникальное"],priceRange:[2000,5000,15000],channels:[{name:"Instagram с фото",score:9,tip:"Красивые фото тортов"},{name:"Сарафанное радио",score:9,tip:"Каждый торт — реклама"},{name:"Ярмарки",score:7,tip:"Локальные маркеты"},{name:"Партнёрства",score:6,tip:"Организаторы, флористы"},{name:"Авито",score:5,tip:"Первые заказы"},{name:"Геосервисы",score:6,tip:"Яндекс.Карты"}],competitors:[{name:"Магазинный торт",price:"1-3к",speed:"Сразу",quality:"Стандарт"},{name:"Домашний кондитер",price:"3-8к",speed:"3-5 дней",quality:"Среднее"},{name:"Студия",price:"10-30к",speed:"1-2 нед",quality:"Высокое"}],tasks:["Выпечка","Декор","Закупки","Общение","Доставка","Фото","Соцсети","Бухгалтерия"],offers:["Авторский торт для {audience}: дизайн + дегустация + доставка за 3 дня","Набор десертов для {audience}: {count} позиций, единый стиль","Абонемент для {audience}: {count} десертов/мес"],slogans:["Торты, в которые влюбляются","Десерт для особого момента","Вкус, который запоминают"]},
-photo:{name:"Фотография",icon:"📸",audiences:["Семьи для фотосессий","Бизнес для предметной съёмки","Блогеры для контента"],problems:["Фото на телефон не продают товар","Фотограф дорого + долго","Нет визуала для соцсетей"],priceRange:[3000,8000,25000],channels:[{name:"Портфолио",score:9,tip:"Instagram — витрина"},{name:"Рекомендации",score:9,tip:"Клиенты приведут друзей"},{name:"Партнёрства",score:7,tip:"Стилисты, визажисты"},{name:"Локальные площадки",score:6,tip:"Авито"},{name:"Контент",score:6,tip:"Бэкстейджи, советы"},{name:"TFP",score:5,tip:"Бесплатные съёмки для портфолио"}],competitors:[{name:"Друг с iPhone",price:"0",speed:"Сразу",quality:"Любительское"},{name:"Начинающий",price:"2-5к",speed:"1-3 дня",quality:"Среднее"},{name:"Профессионал",price:"10-30к",speed:"1-2 нед",quality:"Высокое"}],tasks:["Съёмка","Обработка","Ретушь","Коммуникация","Организация","Доставка фото","Портфолио","Маркетинг"],offers:["Фотосессия для {audience}: {count} фото за 48 часов","Контент-пакет для {audience}: съёмка + обработка + адаптация","Абонемент для {audience}: ежемесячная съёмка, {count} фото"],slogans:["Кадры, рассказывающие историю","Фото, которые продают","Моменты в лучшем свете"]},
-smm:{name:"SMM",icon:"📱",audiences:["Малый бизнес без маркетолога","Эксперты и коучи","Локальный бизнес"],problems:["Ведёт сам — без стратегии","Нанял SMM-щика, продаж нет","Посты раз в месяц"],priceRange:[10000,25000,60000],channels:[{name:"Кейсы",score:9,tip:"До/после: рост"},{name:"Рекомендации",score:8,tip:"Результат = реклама"},{name:"Бизнес-чаты",score:7,tip:"Чаты предпринимателей"},{name:"Партнёрства",score:7,tip:"Таргетологи, дизайнеры"},{name:"Контент",score:6,tip:"Разборы стратегий"},{name:"Реклама",score:4,tip:"Таргет — дорого"}],competitors:[{name:"Сам владелец",price:"0",speed:"Хаотично",quality:"Низкое"},{name:"Фрилансер",price:"10-20к/мес",speed:"По плану",quality:"Среднее"},{name:"Агентство",price:"50-150к/мес",speed:"Стратегия",quality:"Высокое"}],tasks:["Стратегия","Посты","Дизайн","Публикация","Аналитика","Коммуникация","Модерация","Отчёты"],offers:["Ведение соцсетей для {audience}: стратегия + {count} постов/мес + аналитика","Запуск с нуля для {audience}: оформление + стратегия + первый месяц","Контент-пакет для {audience}: {count} постов + дизайн + тексты"],slogans:["Соцсети работают на тебя","Контент → Клиенты","SMM без головной боли"]},
-dev:{name:"Разработка",icon:"💻",audiences:["Стартапы на ранней стадии","Малый бизнес для сайтов","Предприниматели для MVP"],problems:["Студия берёт 500к и 3 месяца","Конструктор — непрофессионально","Нужен MVP, нет техкофаундера"],priceRange:[15000,50000,200000],channels:[{name:"Портфолио/GitHub",score:8,tip:"Живые проекты"},{name:"Рекомендации",score:9,tip:"1 проект = 3 клиента"},{name:"Стартап-чаты",score:7,tip:"Акселераторы"},{name:"Биржи",score:6,tip:"Upwork, FL.ru"},{name:"LinkedIn",score:5,tip:"Посты о разработке"},{name:"Партнёрства",score:7,tip:"Дизайнеры, маркетологи"}],competitors:[{name:"Tilda",price:"0-10к",speed:"1-3 дня",quality:"Шаблонно"},{name:"Фрилансер",price:"20-80к",speed:"2-4 нед",quality:"Среднее"},{name:"Студия",price:"200к-1М",speed:"2-6 мес",quality:"Высокое"}],tasks:["Разработка","Дизайн","Тесты","Деплой","Общение","Поддержка","Документация","Маркетинг"],offers:["MVP для {audience} за 2 недели: дизайн + код + деплой","Сайт для {audience} под ключ за 7 дней","Техпартнёрство для {audience}: разработка + поддержка"],slogans:["Код, который работает","От идеи до продукта","Разработка без боли"]},
-nails:{name:"Маникюр",icon:"💅",audiences:["Девушки 20-35","Невесты","Бизнес-леди"],problems:["В салоне дорого и запись за неделю","Мастер на дому — непредсказуемо","Хочется уникальный дизайн"],priceRange:[1500,3000,6000],channels:[{name:"Instagram",score:9,tip:"Фото каждого маникюра"},{name:"Сарафанное радио",score:9,tip:"Каждый клиент → 2 новых"},{name:"Геосервисы",score:7,tip:"Яндекс.Карты"},{name:"Локальные чаты",score:7,tip:"Чаты района"},{name:"Партнёрства",score:5,tip:"Салоны"},{name:"Avito",score:4,tip:"Первые клиенты"}],competitors:[{name:"Салон эконом",price:"1-2к",speed:"Запись",quality:"Стандарт"},{name:"Мастер на дому",price:"1.5-3к",speed:"Гибко",quality:"Среднее"},{name:"Премиум",price:"5-10к",speed:"Запись",quality:"Высокое"}],tasks:["Маникюр","Дизайн ногтей","Закупки","Запись","Фото","Соцсети","Уборка","Обучение"],offers:["Маникюр для {audience}: дизайн + покрытие + уход за 2 часа","Абонемент для {audience}: {count} посещений/мес","Свадебный маникюр для {audience}: пробный + основной"],slogans:["Ногти, на которые смотрят","Маникюр как искусство","Красота в деталях"]},
-fitness:{name:"Фитнес",icon:"🏋️",audiences:["Новички","Мамы после родов","Офисные с болью в спине"],problems:["Не знает с чего начать","Ходит в зал без результата","Нет мотивации"],priceRange:[2000,5000,15000],channels:[{name:"Трансформации",score:9,tip:"Фото до/после"},{name:"Бесплатные тренировки",score:8,tip:"3 тренировки в парке"},{name:"Рекомендации",score:8,tip:"Результат → друзья"},{name:"Фитнес-чаты",score:6,tip:"Группы здоровья"},{name:"YouTube/Reels",score:7,tip:"Короткие тренировки"},{name:"Партнёрства",score:5,tip:"Диетологи"}],competitors:[{name:"YouTube",price:"0",speed:"Сам",quality:"Без контроля"},{name:"Онлайн-программа",price:"3-10к/мес",speed:"План",quality:"Среднее"},{name:"Персональный тренер",price:"3-5к/занятие",speed:"Индивидуально",quality:"Высокое"}],tasks:["Тренировки","Программы","Питание","Мотивация","Расписание","Контент","Обучение","Маркетинг"],offers:["Персональная программа для {audience}: {count} тренировок/нед + питание + чат","Групповой интенсив для {audience}: 4 недели, {count} тренировки + результат","Онлайн-ведение для {audience}: видео + чекап + корректировки"],slogans:["Результат, который видно","Тренировки с заботой","Начни — удивись через месяц"]},
-psych:{name:"Психология",icon:"🧠",audiences:["Люди в стрессе и выгорании","Пары с проблемами","Предприниматели с тревогой"],problems:["Не знает к кому — страшно","Был у психолога, не помогло","Стесняется признать"],priceRange:[2000,4000,10000],channels:[{name:"Экспертный контент",score:9,tip:"Посты на понятном языке"},{name:"Рекомендации",score:9,tip:"Довольный → расскажет"},{name:"Площадки",score:7,tip:"Yasno, B17, Alter"},{name:"Telegram",score:7,tip:"Разборы, мини-практики"},{name:"Вебинары",score:6,tip:"Про выгорание"},{name:"Партнёрства",score:5,tip:"HR, клиники"}],competitors:[{name:"Бесплатные ресурсы",price:"0",speed:"Сам",quality:"Без обратной связи"},{name:"Онлайн-сервис",price:"2-4к",speed:"Запись",quality:"Среднее"},{name:"Частный",price:"5-10к",speed:"Индивидуально",quality:"Высокое"}],tasks:["Консультации","Подготовка","Записи","Супервизия","Контент","Маркетинг","Обучение","Администрирование"],offers:["Терапия для {audience}: {count} сессии/мес + поддержка","Интенсив для {audience}: 8 сессий за 4 недели","Групповая программа для {audience}: {count} человек, 6 встреч"],slogans:["Пространство, где слышат","Терапия, которая работает","Первый шаг к себе"]},
-handmade:{name:"Handmade",icon:"🧶",audiences:["Люди для уникальных подарков","Интерьерные магазины","Свадебные организаторы"],problems:["Всё одинаковое и массовое","Хочется подарок со смыслом","Декор под стиль"],priceRange:[500,2000,8000],channels:[{name:"Маркетплейсы",score:8,tip:"Ozon, WB, Ярмарка Мастеров"},{name:"Instagram",score:9,tip:"Фото процесса"},{name:"Ярмарки",score:7,tip:"Локальные маркеты"},{name:"Сарафанное радио",score:8,tip:"Каждый подарок — реклама"},{name:"Партнёрства",score:6,tip:"Цветочные, кофейни"},{name:"Avito",score:5,tip:"Первые продажи"}],competitors:[{name:"Масс-маркет",price:"100-500",speed:"Сразу",quality:"Стандарт"},{name:"Хендмейдеры",price:"500-3к",speed:"3-7 дней",quality:"Среднее"},{name:"Дизайнерский бренд",price:"5-20к",speed:"1-3 нед",quality:"Высокое"}],tasks:["Создание","Закупки","Фото","Упаковка","Доставка","Соцсети","Общение","Бухгалтерия"],offers:["Авторский подарок для {audience}: изготовление + упаковка за 3 дня","Серия из {count} изделий для {audience} в едином стиле","Подписка для {audience}: {count} изделия/мес с доставкой"],slogans:["Сделано с душой","Уникальное в деталях","Подарок, который запомнят"]}
-};
-
-// ==================== STATE ====================
-let xp=0,stk=0,curSec=0,selectedNiche=null,chosenOffer=null,delegState={};
-const xpMap={1:10,2:10,3:10,4:20,5:25,6:20,7:15,8:15,9:20};
-const totalSteps=9;
-const achs=[{at:1,i:"🌱",n:"Ниша выбрана!"},{at:4,i:"💎",n:"Оффер создан!"},{at:5,i:"💰",n:"Финмодель готова!"},{at:6,i:"📡",n:"Каналы найдены!"},{at:9,i:"🏆",n:"Бизнес-паспорт!"}];
-
-// ==================== THEME ====================
-function toggleTheme(){const t=document.documentElement.dataset.theme==='dark'?'light':'dark';document.documentElement.dataset.theme=t;document.getElementById('themeBtn').textContent=t==='dark'?'🌙':'☀️';localStorage.setItem('theme',t)}
-(function(){const t=localStorage.getItem('theme')||'dark';document.documentElement.dataset.theme=t;})();
-
-// ==================== INIT ====================
-function initNicheGrid(){const g=document.getElementById('nicheGrid');Object.entries(DB).forEach(([k,v])=>{const d=document.createElement('div');d.className='niche-card';d.dataset.key=k;d.innerHTML=`<span class="nc-icon">${v.icon}</span><div class="nc-name">${v.name}</div><div class="nc-sub">${v.audiences[0].substring(0,28)}...</div>`;d.onclick=()=>{document.querySelectorAll('.niche-card').forEach(c=>c.classList.remove('selected'));d.classList.add('selected');selectedNiche=k;playS(800,.05,.1)};g.appendChild(d)})}
-function initGB(){const g=document.getElementById('gsteps');g.innerHTML='';for(let i=1;i<=totalSteps;i++){const s=document.createElement('div');s.className='gs';s.id='gs'+i;g.appendChild(s)}}
-
-// ==================== NAV ====================
-function startGame(){document.getElementById('heroS').style.display='none';document.getElementById('qArea').style.display='';document.getElementById('gbar').classList.add('on');initGB();initNicheGrid();goSec(1)}
-function backHero(){document.getElementById('heroS').style.display='';document.getElementById('qArea').style.display='none';document.getElementById('gbar').classList.remove('on');window.scrollTo({top:0,behavior:'smooth'})}
-function goSec(n){document.querySelectorAll('.sec').forEach(s=>s.classList.remove('active'));const el=document.getElementById(n==='result'?'sResult':'s'+n);if(el){el.classList.add('active');el.style.animation='none';void el.offsetHeight;el.style.animation=''}curSec=n;for(let i=1;i<=totalSteps;i++){const s=document.getElementById('gs'+i);if(s)s.className='gs'+(i<n?' done':i==n?' cur':'');}window.scrollTo({top:document.getElementById('qArea').offsetTop-70,behavior:'smooth'})}
-function next(n){addXP(xpMap[n-1]||10);if(n===2)genAud();if(n===3)genProb();if(n===4)genOffers();if(n===5)initPricing();if(n===6)genRadar();if(n===7)genComp();if(n===8)genDeleg();achs.forEach(a=>{if(a.at===n-1&&!a.done){a.done=true;setTimeout(()=>showAch(a.i,a.n),600)}});goSec(n);popR();spawnF()}
-function prev(n){goSec(n)}
-
-// ==================== XP ====================
-function addXP(v){xp+=v;stk++;document.getElementById('xpL').textContent=xp+' XP';document.getElementById('gxp').textContent='★ '+xp;document.getElementById('xpF').style.width=Math.min(100,(xp/165)*100)+'%';const lv=xp<20?1:xp<50?2:xp<90?3:xp<130?4:5;document.getElementById('lvlB').textContent='Lvl '+lv;document.getElementById('streak').textContent='🔥 '+stk;playS(600+xp,.03,.15)}
-function showAch(i,n){const el=document.getElementById('ach');document.getElementById('achI').textContent=i;document.getElementById('achN').textContent=n;el.classList.add('show');playS(1200,.04,.3);setTimeout(()=>el.classList.remove('show'),3500)}
-function popR(){const el=document.getElementById('react');el.textContent=['⭐','🔥','💥','🎉','🚀'][Math.floor(Math.random()*5)];el.classList.remove('pop');void el.offsetWidth;el.classList.add('pop')}
-function spawnF(){const em=['⭐','💜','🔥','⚡','🚀'];for(let i=0;i<4;i++){const el=document.createElement('div');el.className='femoji';el.textContent=em[Math.floor(Math.random()*em.length)];el.style.left=(Math.random()*80+10)+'%';el.style.top=(Math.random()*40+30)+'%';el.style.animationDelay=(Math.random()*.3)+'s';document.body.appendChild(el);setTimeout(()=>el.remove(),2500)}}
-function confetti(){const c=['#8b5cf6','#c084fc','#ec4899','#f59e0b','#10b981','#06b6d4','#ef4444'];for(let i=0;i<60;i++){const el=document.createElement('div');el.className='conf';el.style.left=Math.random()*100+'vw';el.style.background=c[Math.floor(Math.random()*c.length)];el.style.width=(Math.random()*8+4)+'px';el.style.height=(Math.random()*8+4)+'px';el.style.borderRadius=Math.random()>.5?'50%':'2px';el.style.animationDuration=(Math.random()*2+2)+'s';el.style.animationDelay=(Math.random()*1.5)+'s';document.body.appendChild(el);setTimeout(()=>el.remove(),5000)}}
-function playS(f,v,d){try{const c=new(window.AudioContext||window.webkitAudioContext)();const o=c.createOscillator();const g=c.createGain();o.connect(g);g.connect(c.destination);o.frequency.value=f;o.type='sine';g.gain.value=v;o.start();g.gain.exponentialRampToValueAtTime(.001,c.currentTime+d);o.stop(c.currentTime+d)}catch(e){}}
-
-// ==================== GENERATORS ====================
-function N(){return selectedNiche?DB[selectedNiche]:DB.video}
-function genAud(){const n=N();const d=document.getElementById('audSug');d.innerHTML='';const w=document.createElement('div');w.style.cssText='display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px';n.audiences.forEach(a=>{const b=document.createElement('button');b.className='btn-chip';b.textContent=a;b.onclick=()=>{document.getElementById('a2').value=a;document.querySelectorAll('#audSug .btn-chip').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');playS(700,.04,.1)};w.appendChild(b)});d.appendChild(w)}
-function genProb(){const n=N();const d=document.getElementById('probSug');d.innerHTML='';const w=document.createElement('div');w.style.cssText='display:flex;flex-direction:column;gap:8px;margin-bottom:12px';n.problems.forEach(p=>{const b=document.createElement('button');b.className='btn-chip';b.style.textAlign='left';b.textContent=p;b.onclick=()=>{document.getElementById('a3').value=p;document.querySelectorAll('#probSug .btn-chip').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');playS(700,.04,.1)};w.appendChild(b)});d.appendChild(w)}
-function genOffers(){const n=N();const aud=document.getElementById('a2').value||n.audiences[0];const list=document.getElementById('offersList');list.innerHTML='';const counts=['5','10','3'];n.offers.forEach((tpl,i)=>{const text=tpl.replace('{audience}',aud.split(',')[0].substring(0,40)).replace('{count}',counts[i]||'5').replace('{format}','Reels');const card=document.createElement('div');card.className='offer-card';card.innerHTML=`<div class="offer-label">Вариант ${i+1}</div><div class="offer-text">${text}</div>`;card.onclick=()=>{document.querySelectorAll('.offer-card').forEach(c=>c.classList.remove('chosen'));card.classList.add('chosen');chosenOffer=text;playS(900,.04,.15)};list.appendChild(card)});document.getElementById('sloganText').textContent=n.slogans[Math.floor(Math.random()*n.slogans.length)]}
-function initPricing(){const n=N();const sl=document.getElementById('priceSlider');sl.min=n.priceRange[0];sl.max=n.priceRange[2];sl.value=n.priceRange[1];document.getElementById('plMin').textContent=fmt(n.priceRange[0]);document.getElementById('plMax').textContent=fmt(n.priceRange[2]);document.getElementById('plMid').textContent='бенчмарк: '+fmt(n.priceRange[1]);updateDash()}
-function updateDash(){const p=+document.getElementById('priceSlider').value;const u=+document.getElementById('unitsIn').value||1;const h=+document.getElementById('hrsIn').value||1;const rev=p*u,prof=Math.round(rev*.7),rate=Math.round(prof/(h*u));document.getElementById('priceVal').innerHTML=fmt(p);document.getElementById('dRev').textContent=fmt(rev);document.getElementById('dProf').textContent=fmt(prof);document.getElementById('dRate').textContent=fmt(rate);const bars=document.getElementById('barsChart');bars.innerHTML='';const months=['Мес 1','Мес 2','Мес 3','Мес 4','Мес 5','Мес 6'];const growth=[.4,.6,.75,.85,.95,1];months.forEach((m,i)=>{const val=Math.round(rev*growth[i]);bars.innerHTML+=`<div class="bar-col"><div class="bar-val">${Math.round(val/1000)}к</div><div class="bar-fill" style="height:${growth[i]*100}%"></div><div class="bar-lbl">${m}</div></div>`})}
-function genRadar(){const n=N();const svg=document.getElementById('radarSvg');const list=document.getElementById('radarList');const cx=110,cy=110,r=80;const labels=['Соцсети','Сарафан','Контент','Реклама','Партнёры','Холодные'];const scores=n.channels.map(c=>c.score/10);let html=`<defs><style>text{font-family:'Space Grotesk';font-size:9px;fill:var(--text-muted)}</style></defs>`;for(let ring=1;ring<=4;ring++){const rr=r*ring/4;html+=`<polygon points="${labels.map((_,i)=>{const a=Math.PI*2*i/6-Math.PI/2;return`${cx+rr*Math.cos(a)},${cy+rr*Math.sin(a)}`}).join(' ')}" fill="none" stroke="var(--border)" stroke-width="1"/>`}labels.forEach((_,i)=>{const a=Math.PI*2*i/6-Math.PI/2;html+=`<line x1="${cx}" y1="${cy}" x2="${cx+r*Math.cos(a)}" y2="${cy+r*Math.sin(a)}" stroke="var(--border)"/>`;html+=`<text x="${cx+(r+14)*Math.cos(a)}" y="${cy+(r+14)*Math.sin(a)}" text-anchor="middle" dominant-baseline="middle">${labels[i]}</text>`});const pts=scores.map((s,i)=>{const a=Math.PI*2*i/6-Math.PI/2;return`${cx+r*s*Math.cos(a)},${cy+r*s*Math.sin(a)}`}).join(' ');html+=`<polygon points="${pts}" fill="rgba(139,92,246,.12)" stroke="var(--accent)" stroke-width="2"/>`;scores.forEach((s,i)=>{const a=Math.PI*2*i/6-Math.PI/2;html+=`<circle cx="${cx+r*s*Math.cos(a)}" cy="${cy+r*s*Math.sin(a)}" r="4" fill="var(--accent)" stroke="var(--text-primary)" stroke-width="1.5"/>`});svg.innerHTML=html;list.innerHTML='';n.channels.sort((a,b)=>b.score-a.score).slice(0,4).forEach((c,i)=>{list.innerHTML+=`<div class="radar-item"><div class="radar-item-title"><span>${['🥇','🥈','🥉','📌'][i]}</span>${c.name}<span class="radar-score">${c.score}/10</span></div><div class="radar-item-desc">${c.tip}</div></div>`})}
-function genComp(){const n=N();const p=+document.getElementById('priceSlider').value;let h=`<table class="comp-table"><thead><tr><th></th><th>Цена</th><th>Скорость</th><th>Качество</th></tr></thead><tbody><tr class="comp-you"><td><span class="comp-you-tag">🌟 Ты</span></td><td>${fmt(p)}</td><td>Быстро</td><td>Высокое</td></tr>`;n.competitors.forEach(c=>{h+=`<tr><td>${c.name}</td><td>${c.price}</td><td>${c.speed}</td><td>${c.quality}</td></tr>`});h+=`</tbody></table><div class="q-hint" style="margin-top:var(--s4)"><span class="hi">💡</span><span><b>Твоё преимущество:</b> Скорость + персональный подход + гибкость.</span></div>`;document.getElementById('compBlock').innerHTML=h}
-function genDeleg(){const n=N();delegState={};const def={me:[0,1,4],asst:[2,3,7],auto:[5,6]};n.tasks.forEach((t,i)=>{delegState[t]=def.me.includes(i)?'me':def.asst.includes(i)?'asst':'auto'});renderDeleg()}
-function renderDeleg(){const d=document.getElementById('delegCols');const cols={me:[],asst:[],auto:[]};Object.entries(delegState).forEach(([t,c])=>cols[c].push(t));const ic={me:'👤',asst:'🤝',auto:'🤖'};const lb={me:'Я сам',asst:'Ассистент',auto:'Автоматизация'};const cls={me:'dc-me',asst:'dc-asst',auto:'dc-auto'};d.innerHTML='';['me','asst','auto'].forEach(c=>{let h=`<div class="deleg-col ${cls[c]}"><div class="deleg-col-title">${ic[c]} ${lb[c]}</div>`;cols[c].forEach(t=>{h+=`<div class="deleg-item" onclick="moveDel('${t.replace(/'/g,"\\'")}')"><span>${t}</span><span class="di-arrow">→</span></div>`});h+=`</div>`;d.innerHTML+=h})}
-function moveDel(t){const nx={me:'asst',asst:'auto',auto:'me'};delegState[t]=nx[delegState[t]];renderDeleg();playS(600,.03,.1)}
-
-// ==================== PASSPORT ====================
-function showPassport(){addXP(xpMap[9]||20);achs.forEach(a=>{if(a.at===9&&!a.done){a.done=true;setTimeout(()=>showAch(a.i,a.n),600)}});const n=N();document.getElementById('ppNiche').textContent=n.icon+' '+n.name;document.getElementById('ppOffer').textContent=chosenOffer||n.offers[0].replace('{audience}','клиентов').replace('{count}','5');document.getElementById('ppSlogan').textContent='"'+n.slogans[0]+'"';document.getElementById('ppAud').textContent=document.getElementById('a2').value||n.audiences[0];document.getElementById('ppProb').textContent=document.getElementById('a3').value||n.problems[0];const p=+document.getElementById('priceSlider').value,u=+document.getElementById('unitsIn').value||1;document.getElementById('ppPrice').textContent=fK(p);document.getElementById('ppRev').textContent=fK(p*u);document.getElementById('ppProfit').textContent=fK(Math.round(p*u*.7));document.getElementById('ppSales').textContent=u;document.getElementById('ppChannels').textContent=n.channels.sort((a,b)=>b.score-a.score).slice(0,3).map(c=>c.name).join(' / ');const dd=document.getElementById('ppDeleg');dd.innerHTML='';Object.entries(delegState).forEach(([t,c])=>{const ic=c==='me'?'👤':c==='asst'?'🤝':'🤖';dd.innerHTML+=`<span style="padding:3px 10px;border-radius:var(--r-full);font-size:11px;font-weight:600;background:var(--bg-elevated);border:1px solid var(--border);color:var(--text-secondary)">${ic} ${t}</span>`});document.getElementById('ppAction').textContent=document.getElementById('a9').value||'—';goSec('result');confetti();popR()}
-
-function fmt(n){return n.toLocaleString('ru-RU')+' ₽'}
-function fK(n){return n>=1000?Math.round(n/1000)+'к ₽':n+' ₽'}
-function dlPNG(){if(typeof html2canvas!=='undefined'){html2canvas(document.getElementById('passCard'),{backgroundColor:getComputedStyle(document.documentElement).getPropertyValue('--bg-primary').trim(),scale:2}).then(c=>{const a=document.createElement('a');a.download='business-passport.png';a.href=c.toDataURL();a.click()})}else{const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';s.onload=()=>dlPNG();document.head.appendChild(s)}}
-</script>
 </body>
 </html>
